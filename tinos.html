@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tino's Tacos & More</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern "Shadcn/Tailwind" Design Tokens */
+        :root {
+            --background: #ffffff;
+            --foreground: #020817;
+            --muted: #f1f5f9;
+            --muted-foreground: #64748b;
+            --border: #e2e8f0;
+            --card: #ffffff;
+            --card-foreground: #020817;
+            --primary: #89C74A;
+            --primary-hover: #75B039;
+            --primary-foreground: #020817;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #0f172a;
+            --radius: 0.5rem;
+            
+            --hero-bg: #2A3B2C;
+            --hero-text: #ffffff;
+        }
+
+        /* Global Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--foreground);
+            background-color: var(--background);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; /* Prevents horizontal scroll issues */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Lora', serif;
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Unified Layout Container - Fixes the edge spacing on all pages */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 4rem; /* Universal left/right spacing */
+        }
+
+        .section-padding {
+            padding: 6rem 0;
+        }
+
+        /* Sleek Shadcn-style Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: calc(var(--radius) - 2px);
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            height: 2.5rem;
+            padding: 0 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--foreground);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .btn-outline.light {
+            border-color: rgba(255,255,255,0.2);
+            color: var(--hero-text);
+            background-color: transparent;
+        }
+        
+        .btn-outline.light:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--foreground);
+        }
+        .btn-ghost:hover {
+            background: var(--secondary);
+        }
+
+        /* Phone Hover Tooltip */
+        .phone-tooltip {
+            position: relative;
+        }
+
+        .phone-tooltip::after {
+            content: "+19252093399";
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background-color: var(--foreground);
+            color: var(--background);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            z-index: 50;
+        }
+
+        .phone-tooltip::before {
+            content: "";
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--foreground) transparent transparent transparent;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .phone-tooltip:hover::after,
+        .phone-tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--muted-foreground);
+        }
+
+        .section-label::before {
+            content: "— ";
+        }
+
+        /* Sleek Navigation (Glassmorphism) */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 40;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            font-family: 'Lora', serif;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--muted-foreground);
+        }
+
+        .nav-links a:hover {
+            color: var(--foreground);
+            transition: color 0.2s;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Pop-out Menu (Radix Sheet / Drawer) */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 450px;
+            max-width: 100vw;
+            background-color: var(--background);
+            z-index: 60;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+        }
+
+        .drawer-content.open {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--muted-foreground);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            width: 32px;
+            border-radius: var(--radius);
+        }
+
+        .btn-close:hover {
+            background-color: var(--secondary);
+            color: var(--foreground);
+        }
+
+        .drawer-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .drawer-review-card {
+            padding: 1.25rem;
+            background-color: var(--secondary);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+        }
+
+        .drawer-review-card p {
+            margin-bottom: 1rem;
+            font-style: italic;
+            color: var(--foreground);
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--hero-bg);
+            color: var(--hero-text);
+            padding: 8rem 0 6rem 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            color: #d1d5db;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+            opacity: 0.9;
+            border-top-left-radius: 50% 100%;
+        }
+
+        /* Shadcn-style Card Grids */
+        .hww-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .hww-grid h2 {
+            font-size: 3rem;
+        }
+
+        .hww-content p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            color: var(--muted-foreground);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Sleek feature cards */
+        .feature-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .feature-card img {
+            height: 220px;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .feature-card-content {
+            padding: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        /* Reviews Slider Section */
+        .reviews {
+            background-color: var(--secondary);
+            padding: 6rem 0;
+            overflow: hidden;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .reviews-header {
+            margin-bottom: 3rem;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .reviews h2 {
+            font-size: 3rem;
+            max-width: 600px;
+            margin-bottom: 0;
+        }
+
+        .reviews-slider-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .review-slide {
+            min-width: 100%;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Sleek Review Card */
+        .review-card {
+            background-color: var(--card);
+            padding: 3rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .review-card p {
+            font-size: 1.125rem;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+            position: relative;
+            color: var(--foreground);
+        }
+        
+        .review-card p::before {
+            content: '“';
+            font-family: 'Lora', serif;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            left: -1.5rem;
+            top: -2rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .reviewer-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--muted-foreground);
+            letter-spacing: 0.05em;
+        }
+
+        /* Updated Slider Controls with Arrow Buttons */
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background-color: var(--background);
+            color: var(--foreground);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-icon:hover {
+            background-color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .slider-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dot.active {
+            background-color: var(--foreground);
+            transform: scale(1.2);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-grid img {
+            height: 300px;
+            width: 100%;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Simple Text Section */
+        .simple-text-section {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .simple-text-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .simple-text-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Stats Section */
+        .stats {
+            background-color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-bottom: 6rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding-top: 3rem;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--foreground);
+        }
+
+        .stat-item h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--hero-bg);
+            color: var(--hero-text);
+            text-align: center;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            font-size: 0.875rem;
+        }
+
+        footer h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #9ca3af;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container { padding: 0 2rem; } 
+            .hero-container { grid-template-columns: 1fr; }
+            .hero { padding: 8rem 0 4rem; }
+            .hero-image { display: none; }
+            .hero-content { max-width: 100%; text-align: left; }
+            .hero h1 { font-size: 3.5rem; }
+            .hww-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .features-grid, .gallery-grid { grid-template-columns: 1fr 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .nav-links { display: none; }
+            .reviews h2 { font-size: 2.5rem; }
+            .reviews-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 0 1.5rem; }
+            .features-grid, .gallery-grid, .stats-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+            .hww-grid h2 { font-size: 2.5rem; }
+            .review-slide { padding: 0; }
+            .review-card { padding: 2rem; }
+            .review-card p { font-size: 1rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; }
+            .drawer-content { width: 100%; border-left: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container nav-container">
+            <div class="nav-left">
+                <div class="logo">Tino's Tacos & More</div>
+                <div class="nav-links">
+                    <a href="#">Menu</a>
+                    <a href="#">Catering</a>
+                    <a href="#">About</a>
+                    <a href="#">Find us</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="btn btn-ghost" onclick="openDrawer()">⭐ Read Reviews</button>
+                <button class="btn btn-primary">Call for catering</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="section-label" style="color: var(--primary);">AUTHENTIC MEXICAN FOOD</span>
+                <h1>Fresh tacos and carne asada, made while you wait.</h1>
+                <p>Fortino and his family serve Livermore from a food truck on First Street. Generous portions, seasoned chicken, fresh avocado, umbrellas overhead. No shortcuts.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">See the menu</button>
+                    <button class="btn btn-outline light phone-tooltip">Call to order</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image"></div>
+    </header>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="hww-grid">
+                <div>
+                    <span class="section-label">HOW WE WORK</span>
+                    <h2>A food truck that operates like a restaurant</h2>
+                </div>
+                <div class="hww-content">
+                    <p>Most food trucks are a pit stop. Tino's Tacos & More is a destination. We're set up on First Street in Livermore with tables, umbrellas, and fresh-made-to-order everything.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">See the full menu</button>
+                        <button class="btn btn-outline">Learn about catering</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1564758564527-b97d79cb27c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Making tacos">
+                    <div class="feature-card-content">
+                        <h3>Made to order, right now</h3>
+                        <p>Your tacos, quesadillas, and burritos are cooked while you wait. Fresh chicken, seasoned right. Fresh avocado on every plate.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="People sitting and eating">
+                    <div class="feature-card-content">
+                        <h3>Sit down and enjoy</h3>
+                        <p>Tables under umbrellas. No eating standing up in a parking lot. Livermore neighbors come here to actually sit.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Catering event">
+                    <div class="feature-card-content">
+                        <h3>From the truck to 200+ guests</h3>
+                        <p>Need to feed a wedding, corporate event, or a big party in Livermore? We bring the same quality. We just bring more of it.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Fresh ingredients">
+                    <div class="feature-card-content">
+                        <h3>Every ingredient matters</h3>
+                        <p>We don't cut corners on avocado, chicken, or salsa. The difference shows up in every bite, whether it's lunch or a 200-person catering order.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cook smiling">
+                    <div class="feature-card-content">
+                        <h3>Fortino runs it like family</h3>
+                        <p>The owner works the line most days. You know who's cooking your food. That matters in a family-owned business.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Food truck">
+                    <div class="feature-card-content">
+                        <h3>Open daily on First Street</h3>
+                        <p>Same spot in Livermore. Reliable. You know where to find us when you want those tacos that rival any sit-down restaurant.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reviews">
+        <div class="container">
+            <div class="reviews-header">
+                <div>
+                    <span class="section-label">GOOGLE REVIEWS</span>
+                    <h2>What our customers say about us</h2>
+                </div>
+                <button class="btn btn-outline" onclick="openDrawer()">View All 8 Reviews</button>
+            </div>
+
+            <div class="reviews-slider-track" id="slider-track">
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"My favorite taco truck in Livermore, I've been coming here for many many years. I've always gotten their Tacos, but just recently discovered how good the Torta Cubana / Cuban Torta and the Quesadilla con Carne / Meat Quesadilla was. Always a good order, you won't be disappointed! everything always tastes amazing, the portions are always satisfying, and everything is fresh and made to order, they also accommodate for modifications like extra sauce."</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The Longtime Local Fan</span>
+                            <span class="reviewer-title">REGULAR CUSTOMER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"Tino's Taco's & More is THE BEST! Tino, Antonio and Rodrigo catered an event at my home that served over 200 people, and EVERYONE RAVED about the food! Tino and team arrived at 10am to set up for a noon start time. They were ready to go on time and stayed past the end time (6pm) to make sure all guests were happily fed. My event was a huge success because of Tino and team, and I am incredibly grateful... Tino's food is EXCEPTIONAL! I heard over and over again from all the guests that the food was absolutely DELICIOUS!"</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The 200-Person Catering Success</span>
+                            <span class="reviewer-title">CATERING CLIENT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"The people here are very nice and the food is delicious. So glad I decided to give them a try. Wet pollo asado was huge and delicious. Chicken was seasoned well and the avocado in the burrito was really fresh. Will definitely be back."</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The 'Wet Burrito' Discovery</span>
+                            <span class="reviewer-title">FIRST-TIME CUSTOMER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"We have been waiting to try Tino’s Taco Truck and finally did! We had the carnitas tacos and I have to say those were the best carnitas I have eaten! The service was excellent. They are super friendly and the quality and quantity of the food was excellent! I highly recommend Tino’s Tacos & more! If you love Mexican food, eat here!"</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The Carnitas Recommendation</span>
+                            <span class="reviewer-title">LOCAL ENTHUSIAST</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"Good food great service. Everything is always cooked fresh to order and the guys running the truck are incredibly welcoming every time you stop by."</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The Five-Star Quick Bite</span>
+                            <span class="reviewer-title">QUICK LUNCH REGULAR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"Flavor and texture of shrimp tacos was awesome, sometimes it seems the best tacos come from the trucks and not the little family restaurants. It's in a parking lot but there are good tables with umbrellas and frankly the taste makes it totally a non-issue, come for the quality."</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The Shrimp Taco Review</span>
+                            <span class="reviewer-title">SEAFOOD LOVER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"The meat in their super burrito is incredibly flavorful and perfectly seasoned. The portions are huge and the guys working are always fast and welcoming."</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The Super Burrito Compliment</span>
+                            <span class="reviewer-title">PORTION FAN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-slide">
+                    <div class="review-card">
+                        <p>"Super friendly staff providing excellent service. Love that they have real tables set up with umbrellas so you can sit outside and enjoy your food hot right when it's made."</p>
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">The Outdoor Dining Experience</span>
+                            <span class="reviewer-title">PATIO FAN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-controls">
+                <button class="btn-icon" id="prevSlide" aria-label="Previous review">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                
+                <div class="slider-dots" id="slider-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
+                    <span class="dot" data-index="5"></span>
+                    <span class="dot" data-index="6"></span>
+                    <span class="dot" data-index="7"></span>
+                </div>
+                
+                <button class="btn-icon" id="nextSlide" aria-label="Next review">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="hww-grid" style="align-items: end;">
+                <div>
+                    <span class="section-label">WHAT WE MAKE</span>
+                    <h2>The dishes Livermore comes back for</h2>
+                </div>
+                <div>
+                    <p style="color: var(--muted-foreground); margin-bottom: 1.5rem;">Fresh ingredients, made while you wait. Carne asada tacos, wet pollo asado burritos, Torta Cubana, and more. The kind of food that tastes like someone cares.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">See the full menu</button>
+                        <button class="btn btn-outline">Order for an event</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-grid">
+                <img src="https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tacos 1">
+                <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tacos 2">
+                <img src="https://images.unsplash.com/photo-1613514785940-daed07799d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tacos 3">
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding simple-text-section">
+        <div class="container">
+            <div class="simple-text-inner">
+                <h2>Fresh tacos made while you wait</h2>
+                <p style="margin-bottom: 2rem; color: var(--muted-foreground);">Stop by 1737 First Street in Livermore or call ahead. We've got tables under the umbrellas, cold drinks, and carne asada that tastes like home.</p>
+                <div class="hero-buttons" style="justify-content: center;">
+                    <button class="btn btn-outline phone-tooltip">Call to order</button>
+                    <button class="btn btn-primary">See the menu</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding stats">
+        <div class="container">
+            <div class="hww-grid">
+                <div>
+                    <span class="section-label">GROWING STRONG</span>
+                    <h2>See how Tino's Tacos & More keeps thriving</h2>
+                </div>
+                <div class="hww-content">
+                    <p>From our spot on First Street in Livermore to catering events for over 200 guests, the numbers show what regulars already know. Fortino and his family built something that works.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-outline">Explore catering options</button>
+                        <button class="btn btn-primary">See the full menu</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>4.7 ★</h3>
+                    <h4>Community rating</h4>
+                    <p>Dozens of reviews from Livermore customers praising fresh food and genuine service.</p>
+                </div>
+                <div class="stat-item">
+                    <h3>200+</h3>
+                    <h4>Catering capacity</h4>
+                    <p>We've proven we can feed large events without losing the quality that made us local favorites.</p>
+                </div>
+                <div class="stat-item">
+                    <h3>15K+</h3>
+                    <h4>Monthly reach</h4>
+                    <p>Steady business between $5,001 and $15,000 monthly shows consistent demand and trust.</p>
+                </div>
+                <div class="stat-item">
+                    <h3>3</h3>
+                    <h4>Family operators</h4>
+                    <p>Fortino, Antonio, and Rodrigo Sanchez handle everything with the care you'd expect from a real family business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-nav">
+                <a href="#">Home</a>
+                <a href="#">Menu</a>
+                <a href="#">Catering</a>
+                <a href="#">Contact</a>
+            </div>
+            <h2>Tino's Tacos & More</h2>
+            <div class="footer-bottom">
+                <span>© 2026 Tino's Tacos & More. All rights reserved.</span>
+                <span>1737 First Street, Livermore, California 94550</span>
+            </div>
+        </div>
+    </footer>
+
+    <div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+    <div id="reviewsDrawer" class="drawer-content">
+        <div class="drawer-header">
+            <h3>All Customer Reviews</h3>
+            <button class="btn-close" onclick="closeDrawer()">×</button>
+        </div>
+        <div class="drawer-body" id="drawerBody">
+            </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /* --- SLIDER & ARROW KEYS LOGIC --- */
+            const track = document.getElementById('slider-track');
+            const dotsContainer = document.getElementById('slider-dots');
+            const dots = dotsContainer.querySelectorAll('.dot');
+            const slides = track.querySelectorAll('.review-slide');
+            
+            const prevBtn = document.getElementById('prevSlide');
+            const nextBtn = document.getElementById('nextSlide');
+
+            let currentSlideIndex = 0;
+            let slideInterval;
+
+            function updateSlider() {
+                track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[currentSlideIndex].classList.add('active');
+            }
+
+            function goToNextSlide() {
+                currentSlideIndex++;
+                if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
+                updateSlider();
+            }
+
+            function goToPrevSlide() {
+                currentSlideIndex--;
+                if (currentSlideIndex < 0) currentSlideIndex = slides.length - 1;
+                updateSlider();
+            }
+
+            function startAutoplay() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(goToNextSlide, 5000);
+            }
+
+            // Arrow Button Click Events
+            prevBtn.addEventListener('click', () => {
+                goToPrevSlide();
+                startAutoplay(); 
+            });
+
+            nextBtn.addEventListener('click', () => {
+                goToNextSlide();
+                startAutoplay();
+            });
+
+            // Keyboard Arrow Key Support
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    goToPrevSlide();
+                    startAutoplay();
+                } else if (e.key === 'ArrowRight') {
+                    goToNextSlide();
+                    startAutoplay();
+                }
+            });
+
+            // Dot navigation
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    currentSlideIndex = parseInt(dot.getAttribute('data-index'));
+                    updateSlider();
+                    startAutoplay();
+                });
+            });
+
+            startAutoplay();
+
+            // Touch swiping
+            let startX = 0, currentX = 0, isSwiping = false;
+
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isSwiping = true;
+                clearInterval(slideInterval);
+            });
+
+            track.addEventListener('touchmove', (e) => {
+                if (!isSwiping) return;
+                currentX = e.touches[0].clientX;
+            });
+
+            track.addEventListener('touchend', (e) => {
+                if (!isSwiping) return;
+                isSwiping = false;
+                const endX = e.changedTouches[0].clientX;
+                const swipeDistance = startX - endX;
+                
+                if (swipeDistance > 50) {
+                    goToNextSlide();
+                } else if (swipeDistance < -50) {
+                    goToPrevSlide();
+                } else {
+                    updateSlider();
+                }
+                startAutoplay();
+            });
+
+            /* --- POP-OUT DRAWER LOGIC --- */
+            const drawerBody = document.getElementById('drawerBody');
+            const reviewCards = document.querySelectorAll('.review-card');
+            
+            reviewCards.forEach(card => {
+                const clone = card.cloneNode(true);
+                clone.className = 'drawer-review-card'; 
+                drawerBody.appendChild(clone);
+            });
+        });
+
+        // Drawer Toggle Functions
+        function openDrawer() {
+            document.getElementById('drawerOverlay').classList.add('open');
+            document.getElementById('reviewsDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('open');
+            document.getElementById('reviewsDrawer').classList.remove('open');
+            document.body.style.overflow = ''; 
+            document.body.style.overflowX = 'hidden'; // Restore X hiding
+        }
+    </script>
+
+</body>
+</html>
